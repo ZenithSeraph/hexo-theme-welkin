@@ -1,0 +1,47 @@
+{
+  "name": "hexo-theme-welkin",
+  "version": "1.0.0",
+  "description": "A Hexo theme inspired by Arknights, with glass archives and paper reading pages.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZenithSeraph/hexo-theme-welkin.git"
+  },
+  "keywords": [
+    "hexo",
+    "hexo-theme",
+    "welkin",
+    "arknights"
+  ],
+  "scripts": {
+    "test": "node test/smoke.mjs && node test/touch.mjs && node test/input.mjs"
+  },
+  "files": [
+    "_config.yml",
+    "layout/",
+    "lib/",
+    "scripts/",
+    "source/",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "README.md"
+  ],
+  "dependencies": {
+    "hexo-util": "^4.0.0",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "hexo": "^8.1.2",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-index": "^4.0.0",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-ejs": "^2.0.0",
+    "hexo-renderer-marked": "^7.0.1",
+    "js-yaml": "^4.1.0",
+    "jsdom": "^25.0.1"
+  }
+}
