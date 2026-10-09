@@ -1,0 +1,38 @@
+<% if (page.current && page.current > 1) { %>
+  <%- partial('_partial/listing', { listingTitle: '文章归档', listingPosts: welkin_collection(page.posts), paginate: true }) %>
+<% } else { %>
+<% const allPosts = welkin_all_posts(); const latest = allPosts.length ? welkin_metadata(allPosts[0]) : null; %>
+<div id="home-view">
+  <section id="feature-stage" class="feature-stage" aria-label="文章档案" data-archive-view="overview">
+    <div id="glass-scene" aria-label="三维玻璃档案：滚轮、滑动或下方按钮选文"><span class="scene-placeholder">载入档案</span></div>
+    <h1 class="sr-only"><%= config.title %> · 文章档案</h1>
+    <button type="button" id="archive-close" class="archive-close" aria-keyshortcuts="Escape" hidden>← 返回档案</button>
+    <div class="archive-navigation">
+      <span id="feature-position" aria-live="polite"><%= latest ? '01 / ' + String(allPosts.length).padStart(2, '0') : '00 / 00' %></span>
+      <div class="step-controls"><button type="button" id="previous-archive" aria-label="上一份档案">←</button><button type="button" id="next-archive" aria-label="下一份档案">→</button></div>
+      <span class="scene-guide"><span class="desktop-guide">滚动切换</span><span class="touch-guide">滑动切换</span></span>
+    </div>
+    <div id="post-selector" hidden></div>
+    <div id="feature-media" class="feature-media">
+      <div class="cover-window"><div class="media-fallback" aria-hidden="true"><svg viewBox="0 0 600 480"><g id="fallback-contours" fill="none" stroke="currentColor" stroke-width=".7"></g></svg></div><img id="cover-a" class="cover-layer" alt="" decoding="async" fetchpriority="high"><img id="cover-b" class="cover-layer" alt="" decoding="async"><% if (latest && latest.cover) { %><noscript><img class="noscript-cover" src="<%= latest.glassCover || url_for(latest.cover) %>" alt="<%= latest.title %>" decoding="async"></noscript><% } %></div>
+      <span id="cover-status" class="cover-status" role="status" hidden>封面暂未载入</span>
+      <a id="feature-link" class="feature-link" href="<%= latest ? latest.url : url_for('/' + config.archive_dir + '/') %>">
+        <div class="feature-copy"><p class="post-meta"><span id="feature-category"><%= latest ? latest.category : '' %></span><time id="feature-date"<% if (latest) { %> datetime="<%= latest.date %>"<% } %>><%= latest ? latest.date.replace(/-/g, '.') : '' %></time></p><h2 id="feature-title"><%= latest ? latest.title : '这里的故事即将开始' %></h2></div>
+        <span class="read-arrow">打开档案 <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+      <div id="detail-panel" class="detail-panel" hidden><p id="detail-excerpt"></p><p id="detail-tags"></p><a id="detail-original" href="<%= latest ? latest.url : url_for('/' + config.archive_dir + '/') %>" data-paper-link>阅读全文 ↗</a></div>
+    </div>
+    <button id="show-articles" class="show-articles" type="button" aria-expanded="false" aria-controls="archive"><span aria-hidden="true">↓</span><span>所有文章</span></button>
+  </section>
+  <section id="archive" class="archive wrap" aria-labelledby="archive-title" hidden>
+    <div class="archive-head"><h2 id="archive-title">所有文章<span id="archive-count"><%= allPosts.length %></span></h2><div class="archive-tools"><label class="category-control"><span class="sr-only">按分类筛选</span><select id="category"><option value="all">全部分类</option></select><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor"/></svg></label><label class="search-control"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" fill="none"/><path d="m13 13 4 4" stroke="currentColor"/></svg><span class="sr-only">搜索文章标题、摘要与标签</span><input id="search" type="search" placeholder="搜索文章" autocomplete="off"></label></div></div>
+    <div id="entries" class="entries">
+      <% allPosts.forEach(post => { %><a class="entry" href="<%= url_for(post.path) %>" data-paper-link><time class="entry-date" datetime="<%= post.date.format('YYYY-MM-DD') %>"><%= post.date.format('YYYY.MM.DD') %></time><span class="entry-title"><%= post.title %></span><span class="entry-category"><%= welkin_collection(post.categories).map(category => category.name).join(' · ') %></span><span class="entry-arrow" aria-hidden="true">↗</span></a><% }) %>
+    </div>
+    <p id="empty" class="empty" hidden>没有找到文章，试试其他关键词。</p>
+    <p class="sr-only" id="search-status" role="status" aria-live="polite"></p>
+    <button id="more" class="more" type="button" hidden>查看全部文章 <span aria-hidden="true">↓</span></button>
+  </section>
+  <noscript><div class="wrap"><a href="<%= url_for('/' + config.archive_dir + '/') %>">打开完整文章归档</a></div></noscript>
+</div>
+<% } %>

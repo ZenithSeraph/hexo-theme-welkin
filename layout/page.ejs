@@ -1,0 +1,8 @@
+<% const isArchiveIndex = String(page.path || '').replace(/index\.html$/, '').replace(/\/+$/, '') === String(config.archive_dir || 'archives').replace(/\/+$/, ''); %>
+<% if (isArchiveIndex) { %>
+  <%- partial('_partial/listing', { listingTitle: '所有文章', listingPosts: welkin_all_posts(), paginate: false, listingKind: 'archives' }) %>
+<% } else if (page.type === 'categories' || page.type === 'tags') { %>
+  <%- partial('_partial/taxonomy') %>
+<% } else { %>
+  <div class="paper-stage"><div class="paper-glass" aria-hidden="true"><span class="glass-rim"></span><span class="glass-tab"></span></div><article id="reading-view" class="paper-sheet" aria-labelledby="article-title"><header class="reading-header"><a class="back-link" href="<%= url_for('/') %>">← 返回档案</a><h1 id="article-title"><%= page.title %></h1></header><div id="article-start" class="prose"><%- page.content %></div></article></div>
+<% } %>

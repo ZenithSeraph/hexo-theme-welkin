@@ -1,0 +1,13 @@
+<% const homePage = is_home() && (!page.current || page.current === 1); %>
+<!doctype html>
+<html lang="<%= config.language || 'zh-CN' %>">
+<head>
+  <%- partial('_partial/head', { homePage }) %>
+</head>
+<body class="<%= homePage ? 'is-home' : 'is-reading' %>" data-site-root="<%= url_for('/') %>" data-home="<%= String(homePage) %>">
+  <a class="skip" href="#main">跳至正文</a>
+  <%- partial('_partial/header', { homePage }) %>
+  <main id="main"><%- body %></main>
+  <%- partial('_partial/footer', { homePage }) %>
+</body>
+</html>

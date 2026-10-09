@@ -1,0 +1,28 @@
+<%
+  const allPosts = welkin_all_posts();
+  const position = allPosts.findIndex(post => post.path === page.path);
+  const newer = position > 0 ? allPosts[position - 1] : null;
+  const older = position >= 0 ? allPosts[position + 1] : null;
+  const categories = welkin_collection(page.categories);
+  const tags = welkin_collection(page.tags);
+  const contents = theme.toc !== false ? toc(page.content, { list_number: false, max_depth: 3 }) : '';
+%>
+<div class="paper-stage">
+  <div class="paper-glass" aria-hidden="true"><span class="glass-rim"></span><span class="glass-tab"></span></div>
+  <article id="reading-view" class="paper-sheet" aria-labelledby="article-title">
+    <header class="reading-header">
+      <a class="back-link" href="<%= url_for('/') %>" data-back-to-archive>← 返回档案</a>
+      <p class="post-meta"><% categories.forEach(category => { %><a href="<%= url_for(category.path) %>"><%= category.name %></a><% }) %><time datetime="<%= page.date.toISOString() %>"><%= page.date.format('YYYY.MM.DD') %></time></p>
+      <h1 id="article-title"><%= page.title %></h1>
+      <div class="reading-byline"><span><%= page.author || config.author %></span><button type="button" id="reading-theme" aria-pressed="false" hidden>深色阅读</button></div>
+      <% if (contents && contents.includes('<li')) { %><details class="paper-toc"><summary>文章目录<span aria-hidden="true">＋</span></summary><nav aria-label="文章目录"><%- contents %></nav></details><% } %>
+    </header>
+    <div id="article-start" class="prose"><%- page.content %></div>
+    <% if (page.mp3) { %><audio class="article-audio" controls preload="none"><source src="<%= page.mp3 %>" type="audio/mpeg">浏览器不支持音频播放。</audio><% } %>
+    <footer class="article-footer"><div class="article-tags"><% tags.forEach(tag => { %><a href="<%= url_for(tag.path) %>" rel="tag"><%= tag.name %></a><% }) %></div><a href="#article-title">回到页首 ↑</a></footer>
+    <% if (newer || older) { %><nav class="post-neighbours" aria-label="相邻文章">
+      <div><% if (newer) { %><a href="<%= url_for(newer.path) %>" rel="prev"><small>← 新一篇</small><span><%= newer.title %></span></a><% } %></div>
+      <div><% if (older) { %><a href="<%= url_for(older.path) %>" rel="next"><small>早一篇 →</small><span><%= older.title %></span></a><% } %></div>
+    </nav><% } %>
+  </article>
+</div>

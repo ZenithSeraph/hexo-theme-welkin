@@ -1,0 +1,2 @@
+<% const tag = welkin_collection(site.tags).find(item => item.name === page.tag); %>
+<%- partial('_partial/listing', { listingTitle: page.tag, listingPosts: welkin_collection(page.posts).sort((a, b) => Number(b.date) - Number(a.date)), listingTotal: tag ? welkin_collection(tag.posts).filter(post => post.published !== false).length : undefined, listingKind: 'tags', paginate: true }) %>

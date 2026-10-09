@@ -1,0 +1,5 @@
+<%
+  const title = page.year ? String(page.year) + (page.month ? '.' + String(page.month).padStart(2, '0') : '') : '所有文章';
+  const archiveTotal = welkin_all_posts().filter(post => (!page.year || post.date.year() === Number(page.year)) && (!page.month || post.date.month() + 1 === Number(page.month))).length;
+%>
+<%- partial('_partial/listing', { listingTitle: title, listingPosts: welkin_collection(page.posts).sort((a, b) => Number(b.date) - Number(a.date)), listingTotal: archiveTotal, listingKind: 'archives', paginate: true }) %>
