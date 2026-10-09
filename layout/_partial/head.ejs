@@ -1,0 +1,40 @@
+<%
+  let label = page.title || '';
+  if (is_archive()) label = '文章归档' + (page.year ? ' · ' + page.year + (page.month ? '.' + String(page.month).padStart(2, '0') : '') : '');
+  if (is_category()) label = '分类 · ' + page.category;
+  if (is_tag()) label = '标签 · ' + page.tag;
+  if (page.type === 'categories') label = '分类';
+  if (page.type === 'tags') label = '标签';
+  if (page.title === 'archives') label = '文章归档';
+  const siteTitle = config.title || "Welkin";
+  const pageTitle = homePage ? siteTitle : (label ? label + ' — ' : '') + siteTitle;
+  const description = welkin_description(page.description || page.excerpt || (is_post() ? page.content : '') || config.description, 160);
+  const canonical = page.permalink || full_url_for(page.path || '');
+%>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#eae5e1">
+  <title><%= pageTitle %></title>
+  <meta name="description" content="<%= description %>">
+  <link rel="canonical" href="<%= canonical %>">
+  <meta property="og:site_name" content="<%= siteTitle %>">
+  <meta property="og:title" content="<%= pageTitle %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:url" content="<%= canonical %>">
+  <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
+  <% if (page.cover) { %><meta property="og:image" content="<%= page.cover %>"><% } %>
+  <% if (is_post() && page.date) { %><meta property="article:published_time" content="<%= page.date.toISOString() %>"><% } %>
+  <link rel="stylesheet" href="<%= url_for('/assets/welkin/style.css') %>">
+  <% if (homePage) { %>
+  <script src="<%= url_for('/assets/welkin/posts.js') %>" defer></script>
+  <script src="<%= url_for('/assets/welkin/motion.js') %>" defer></script>
+  <script src="<%= url_for('/assets/welkin/app.js') %>" defer></script>
+  <script src="<%= url_for('/assets/welkin/detail-view.js') %>" defer></script>
+  <script type="importmap"><%- JSON.stringify({ imports: { three: url_for('/assets/welkin/vendor/three.module.js') } }).replace(/</g, '\\u003c') %></script>
+  <script type="module" src="<%= url_for('/assets/welkin/glass-scene.js') %>"></script>
+  <noscript><style>.feature-stage{--archive-detail:1!important}.archive-navigation,.show-articles,.archive-close,.read-arrow{display:none!important}#archive[hidden],#site-footer[hidden]{display:block!important}.feature-link{pointer-events:auto!important}.scene-placeholder{display:none}.noscript-cover{display:block;width:100%;height:100%;object-fit:cover}</style></noscript>
+  <% } else { %>
+  <link rel="stylesheet" href="<%= url_for('/assets/welkin/paper.css') %>">
+  <script src="<%= url_for('/assets/welkin/reading.js') %>" defer></script>
+  <% } %>

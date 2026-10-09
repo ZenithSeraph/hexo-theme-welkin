@@ -1,0 +1,38 @@
+<%
+  const kind = typeof listingKind === 'string' ? listingKind : 'archives';
+  const totalRecords = typeof listingTotal === 'number' ? listingTotal : (is_home() ? welkin_all_posts().length : listingPosts.length);
+  const paginated = typeof paginate !== 'undefined' && paginate && page.total > 1;
+  const returnPath = kind === 'categories' ? '/' + config.category_dir + '/' : kind === 'tags' ? '/' + config.tag_dir + '/' : '/';
+  const returnLabel = kind === 'categories' ? '分类目录' : kind === 'tags' ? '标签目录' : '返回档案';
+  const years = [];
+  listingPosts.forEach(post => {
+    const year = post.date.format('YYYY');
+    let group = years.find(item => item.year === year);
+    if (!group) { group = { year, posts: [] }; years.push(group); }
+    group.posts.push(post);
+  });
+%>
+<div class="paper-stage paper-stage--listing">
+  <div class="paper-glass" aria-hidden="true"><span class="glass-rim"></span></div>
+  <section class="paper-sheet collection-sheet archive-sheet" aria-labelledby="listing-title">
+    <header class="reading-header collection-header">
+      <a class="back-link" href="<%= url_for(returnPath) %>">← <%= returnLabel %></a>
+      <div class="collection-heading"><h1 id="listing-title"><%= listingTitle %></h1><p class="listing-summary"><%= totalRecords %> 篇记录</p></div>
+    </header>
+    <%- partial('_partial/index-nav', { activeIndex: kind }) %>
+    <div class="archive-groups">
+      <% years.forEach(group => { %>
+      <section class="archive-year-group" aria-labelledby="year-<%= group.year %>">
+        <h2 class="archive-year" id="year-<%= group.year %>"><%= group.year %></h2>
+        <ul class="archive-year-posts">
+          <% group.posts.forEach(post => { %>
+          <li><a class="archive-row" href="<%= url_for(post.path) %>"><time datetime="<%= post.date.toISOString() %>"><%= post.date.format('MM.DD') %></time><span class="archive-row-title"><%= post.title %></span><span class="archive-row-arrow" aria-hidden="true">↗</span></a></li>
+          <% }) %>
+        </ul>
+      </section>
+      <% }) %>
+    </div>
+    <% if (!listingPosts.length) { %><p class="collection-empty">这里暂时还没有文章。</p><% } %>
+    <% if (paginated) { %><div class="collection-pagination"><p>第 <%= page.current %> / <%= page.total %> 页<span>本页 <%= listingPosts.length %> 篇</span></p><nav class="pagination" aria-label="文章分页"><%- paginator({ prev_text: '← 上一页', next_text: '下一页 →', mid_size: 1, end_size: 1, escape: false }) %></nav></div><% } %>
+  </section>
+</div>

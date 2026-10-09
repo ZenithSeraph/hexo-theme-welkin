@@ -1,0 +1,8 @@
+<header class="site-header">
+  <a class="wordmark" href="<%= url_for('/') %>" aria-label="<%= config.title %> 首页"><span><%= (config.title || "Welkin").toUpperCase() %></span><small><%= config.subtitle || '' %></small></a>
+  <nav aria-label="主导航">
+    <a href="<%= url_for('/') %>" data-nav="home"<% if (homePage) { %> class="active" aria-current="page"<% } %>>首页</a>
+    <a href="<%= homePage ? '#archive' : url_for('/' + config.archive_dir + '/') %>" data-nav="archive"<% if (is_archive() || page.title === 'archives') { %> class="active" aria-current="true"<% } %>>所有文章</a>
+    <a href="<%= url_for('/' + config.category_dir + '/') %>" data-nav="categories"<% if (is_category() || page.type === 'categories') { %> class="active" aria-current="true"<% } %>>分类</a>
+  </nav>
+</header>

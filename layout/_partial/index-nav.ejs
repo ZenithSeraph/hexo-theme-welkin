@@ -1,0 +1,9 @@
+<nav class="collection-nav" aria-label="文章索引">
+  <% [
+    { key: 'archives', name: '所有文章', path: config.archive_dir },
+    { key: 'categories', name: '分类', path: config.category_dir },
+    { key: 'tags', name: '标签', path: config.tag_dir }
+  ].forEach(item => { %>
+  <a href="<%= url_for('/' + item.path + '/') %>"<% if (activeIndex === item.key) { %> class="is-current" aria-current="true"<% } %>><%= item.name %></a>
+  <% }) %>
+</nav>

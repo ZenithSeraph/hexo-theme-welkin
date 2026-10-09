@@ -1,0 +1,52 @@
+<%
+  const categoriesPage = page.type === 'categories';
+  const kind = categoriesPage ? '分类' : '标签';
+  const groups = welkin_collection(categoriesPage ? site.categories : site.tags).map(item => ({
+    item,
+    posts: welkin_collection(item.posts).filter(post => post.published !== false).sort((a, b) => Number(b.date) - Number(a.date))
+  })).filter(group => group.posts.length).sort((a, b) => b.posts.length - a.posts.length || a.item.name.localeCompare(b.item.name, 'zh-CN'));
+  const articleCount = new Set(groups.flatMap(group => group.posts.map(post => post.path))).size;
+%>
+<div class="paper-stage paper-stage--listing<%= categoriesPage ? ' paper-stage--library' : '' %>">
+  <div class="paper-glass" aria-hidden="true"><span class="glass-rim"></span></div>
+  <section class="paper-sheet collection-sheet taxonomy-sheet<%= categoriesPage ? ' library-sheet' : '' %>" aria-labelledby="listing-title">
+    <header class="reading-header collection-header">
+      <a class="back-link" href="<%= url_for('/') %>">← 返回档案</a>
+      <div class="collection-heading"><h1 id="listing-title"><%= categoriesPage ? '分类档案' : kind %></h1><p class="listing-summary"><%= groups.length %> 个<%= kind %><span aria-hidden="true"> · </span><%= articleCount %> 篇记录</p></div>
+    </header>
+    <%- partial('_partial/index-nav', { activeIndex: categoriesPage ? 'categories' : 'tags' }) %>
+    <% if (categoriesPage) { %>
+    <div class="archive-library">
+      <% groups.forEach((group, groupIndex) => { %>
+      <section class="archive-cabinet" aria-labelledby="cabinet-<%= groupIndex %>">
+        <header class="cabinet-header"><a href="<%= url_for(group.item.path) %>"><h2 id="cabinet-<%= groupIndex %>"><%= group.item.name %></h2><span class="cabinet-count"><%= group.posts.length %> 篇</span><span class="cabinet-arrow" aria-hidden="true">↗</span></a></header>
+        <div class="cabinet-shelf" role="region" aria-label="<%= group.item.name %>，全部 <%= group.posts.length %> 篇文章" tabindex="0">
+          <ol class="cabinet-records">
+            <% group.posts.forEach(post => { %>
+            <li><a class="cabinet-record" href="<%= url_for(post.path) %>"><span class="cabinet-file" aria-hidden="true"><span class="cabinet-paper"></span></span><span class="cabinet-record-copy"><span class="cabinet-record-title"><%= post.title %></span><time datetime="<%= post.date.toISOString() %>"><%= post.date.format('YYYY.MM.DD') %></time></span><span class="cabinet-record-arrow" aria-hidden="true">↗</span></a></li>
+            <% }) %>
+          </ol>
+        </div>
+        <div class="cabinet-base" aria-hidden="true"></div>
+      </section>
+      <% }) %>
+    </div>
+    <% } else { %>
+    <ul class="taxonomy-list taxonomy-list--tags">
+      <% groups.forEach(group => { %>
+      <li>
+        <a class="taxonomy-row" href="<%= url_for(group.item.path) %>">
+          <div class="taxonomy-main">
+            <h2><%= group.item.name %></h2>
+          </div>
+          <span class="taxonomy-count"><strong><%= group.posts.length %></strong><span>篇</span></span>
+          <span class="taxonomy-arrow" aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <% if (!groups.length) { %><p class="collection-empty">暂时还没有<%= kind %>。</p><% } %>
+    <% if (page.content) { %><div class="prose"><%- page.content %></div><% } %>
+  </section>
+</div>

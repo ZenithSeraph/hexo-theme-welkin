@@ -1,0 +1,4 @@
+<footer id="site-footer" class="site-footer wrap"<% if (homePage) { %> hidden<% } %>>
+  <span>© <%= new Date().getFullYear() %> <%= config.author %></span>
+  <div><span id="article-total"><%= welkin_all_posts().length %> 篇记录</span><a href="#main" aria-label="返回顶部">↑</a></div>
+</footer>
