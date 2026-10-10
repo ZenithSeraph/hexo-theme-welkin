@@ -4,6 +4,8 @@ Welkin 是一款 Hexo 主题，**视觉设计参考《明日方舟》的档案�
 
 An Arknights-inspired Hexo theme with interactive glass archives and paper reading pages.
 
+[☕ 请作者喝咖啡](SUPPORT.md)
+
 本项目是独立的社区主题。部分动效公式参考并改编自 RhineLabUI，已保留其 MIT 版权声明。主题包不包含游戏立绘、标志、音频或字体。
 
 ## 特性
@@ -104,8 +106,19 @@ npx hexo server
 
 主题脚本、样式和 WebGL 资源位于 `source/assets/welkin/`，模板位于 `layout/`。该仓库仅提供主题及文档，不包含作者的网站文章、图片、站点配置、部署凭据或原站点的 Git 历史。
 
+## 请作者喝咖啡
+
+如果 Welkin 正好合你心意，可以请我喝杯咖啡。谢谢你的喜欢，也谢谢你愿意支持我继续打磨它。
+
+<img src="alipay-qr.png" alt="支付宝收款二维码" width="240" height="240">
+
+用支付宝扫一扫，或保存图片后从相册识别。金额随意，完全自愿。
+
+[打开打赏页面](SUPPORT.md)
+
 ## 版权
 
 Copyright (c) 2026 ZenithSeraph. 本主题代码使用 [MIT 许可证](LICENSE)。使用和分发时请保留许可证及相关版权声明。
 
 第三方代码归属与《明日方舟》设计参考说明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
